@@ -1,0 +1,45 @@
+const http = require("http");
+const express = require("express");
+const app = express();
+const fs = require("fs");
+const port = 3000;
+const body = require("body-parser");
+app.use(body.json());
+const data1 = [];
+const data2 = [];
+app.post("/Room", (req, res) => {
+  data1.push(req.body);
+  console.log(req.body);
+  res.json({
+    message: "file created",
+  });
+});
+app.post("/customer", (req, res) => {
+  data2.push(req.body);
+  console.log(req.body);
+});
+app.get("/bookedcustomer", (req, res) => {
+  const person1 = data2.map((value) => {
+    return {
+      CustomerName: value.name,
+      CustomerId: value.id,
+    };
+  });
+  res.json(person1);
+});
+
+app.get("/bookedroom", (req, res) => {
+  const person2 = data2.map((value) => {
+    return {
+      CustomerName: value.name,
+      CustomerId: value.id,
+      StartTime: value.start,
+      EndTime: value.end,
+      StartDate: value.date,
+    };
+  });
+  res.json(person2);
+});
+app.listen(process.env.PORT || port, () => {
+  console.log(`server is listening to port ${port}`);
+});
